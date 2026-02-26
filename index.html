@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WeIIcome</title>
+    <title>लाइव हिट काउंटर (सुधारित)</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,6 +38,15 @@
             font-size: 16px;
             margin-top: 20px;
         }
+        .error-message {
+            color: #d32f2f;
+            font-size: 14px;
+            margin-top: 10px;
+            background: #ffebee;
+            padding: 8px;
+            border-radius: 4px;
+            display: none;
+        }
         .redirect-note {
             color: #888;
             font-size: 14px;
@@ -51,28 +60,38 @@
         <h2>कुल हिट्स (लाइव)</h2>
         <div class="hit-number" id="hitCount">—</div>
         <div class="message" id="statusMessage">हिट दर्ज किया जा रहा है...</div>
+        <div class="error-message" id="errorMsg"></div>
         <div class="redirect-note" id="redirectMsg">1 सेकंड में दूसरे पेज पर भेजा जाएगा</div>
     </div>
 
     <script>
-        // वर्कर का बेस URL (आपकी दी हुई URL)
-        const WORKER_URL = 'https://wandering-queen-c1f8.vikash6759ub.workers.dev/';
+        // वर्कर का बेस URL – अंत में स्लैश नहीं है (महत्वपूर्ण!)
+        const WORKER_BASE = 'https://wandering-queen-c1f8.vikash6759ub.workers.dev';
 
         // DOM एलिमेंट्स
         const hitSpan = document.getElementById('hitCount');
         const statusMsg = document.getElementById('statusMessage');
+        const errorMsgDiv = document.getElementById('errorMsg');
         const redirectMsg = document.getElementById('redirectMsg');
+
+        function showError(message) {
+            errorMsgDiv.style.display = 'block';
+            errorMsgDiv.textContent = '❌ ' + message;
+        }
 
         // 1. मौजूदा हिट काउंट पढ़ें
         async function fetchCurrentHits() {
             try {
-                const response = await fetch(WORKER_URL + '/hits');
-                if (!response.ok) throw new Error('सर्वर त्रुटि');
+                const response = await fetch(WORKER_BASE + '/hits');
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`सर्वर त्रुटि (${response.status}): ${errText}`);
+                }
                 const data = await response.json();
                 hitSpan.textContent = data.hits;
             } catch (error) {
-                hitSpan.textContent = '❌ त्रुटि';
-                statusMsg.textContent = 'हिट पढ़ने में समस्या: ' + error.message;
+                hitSpan.textContent = '❌';
+                showError('हिट पढ़ने में समस्या: ' + error.message);
                 console.error(error);
             }
         }
@@ -80,15 +99,19 @@
         // 2. हिट काउंट बढ़ाएँ
         async function incrementHit() {
             try {
-                const response = await fetch(WORKER_URL + '/hits', {
+                const response = await fetch(WORKER_BASE + '/hits', {
                     method: 'POST'
                 });
-                if (!response.ok) throw new Error('सर्वर त्रुटि');
+                if (!response.ok) {
+                    const errText = await response.text();
+                    throw new Error(`सर्वर त्रुटि (${response.status}): ${errText}`);
+                }
                 const data = await response.json();
                 hitSpan.textContent = data.hits;   // नया काउंट दिखाएँ
                 statusMsg.textContent = 'हिट सफलतापूर्वक दर्ज हुआ ✅';
             } catch (error) {
-                statusMsg.textContent = 'हिट बढ़ाने में समस्या: ' + error.message;
+                statusMsg.textContent = 'हिट बढ़ाने में समस्या';
+                showError(error.message);
                 console.error(error);
             }
         }
@@ -96,8 +119,8 @@
         // 3. रीडायरेक्ट सेट करें (1 सेकंड बाद)
         function startRedirect() {
             setTimeout(() => {
-                window.location.href = 'Mypages.html';  // यहाँ अपने टार्गेट पेज का नाम दें
-            }, 100);
+                window.location.href = 'mypages.html';  // अपने टार्गेट पेज का नाम
+            }, 1000);
         }
 
         // पेज लोड होते ही कार्य शुरू करें
