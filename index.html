@@ -108,7 +108,7 @@
                 }
                 const data = await response.json();
                 hitSpan.textContent = data.hits;   // नया काउंट दिखाएँ
-                statusMsg.textContent = 'हिट सफलतापूर्वक दर्ज हुआ ✅';
+                statusMsg.textContent = '';
             } catch (error) {
                 statusMsg.textContent = 'हिट बढ़ाने में समस्या';
                 showError(error.message);
@@ -120,7 +120,7 @@
         function startRedirect() {
             setTimeout(() => {
                 window.location.href = 'mypages.html';  // अपने टार्गेट पेज का नाम
-            }, 1000);
+            }, 100);
         }
 
         // पेज लोड होते ही कार्य शुरू करें
