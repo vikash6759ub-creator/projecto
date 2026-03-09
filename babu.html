@@ -568,12 +568,9 @@
                 const payload = {
                     type: "Convert To Cash",
                     data: {
-                        screch: "Sucess",
-                        timestamp: new Date().toISOString()
-                    },
-                    id: "conv_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9)
-                };
-
+                        Screch: "Sucessfully",
+                        
+                    }
                 try {
                     const response = await fetch(WORKER_URL, {
                         method: 'POST',
